@@ -1,24 +1,52 @@
 "use client";
 
-import { useState } from "react";
 import { Button, TextField } from "@radix-ui/themes";
 import MDEditor from "@uiw/react-md-editor";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
 
-type Props = {};
+interface IssueForm {
+  title: string;
+  description: string;
+}
 
-const NewIssuePage = (props: Props) => {
-  const [value, setValue] = useState("Description");
+const NewIssuePage = () => {
+  const router = useRouter();
+  const { register, control, handleSubmit } = useForm<IssueForm>();
 
   return (
-    <div className="max-w-xl space-y-3">
+    <form
+      className="max-w-xl space-y-3"
+      onSubmit={handleSubmit(async (data) => {
+        const result = await axios.post("/api/issues", data);
+
+        if (result.status === 201) {
+          router.push("/issues");
+        }
+
+        return;
+      })}
+    >
       <TextField.Root>
-        <TextField.Input placeholder="Title" />
+        <TextField.Input placeholder="Title" {...register("title")} />
       </TextField.Root>
 
-      <MDEditor value={value} onChange={setValue} />
+      <Controller
+        name="description"
+        control={control}
+        render={({ field }) => (
+          <MDEditor
+            textareaProps={{
+              placeholder: "Description",
+            }}
+            {...field}
+          />
+        )}
+      />
 
       <Button>Submit New Issue</Button>
-    </div>
+    </form>
   );
 };
 
