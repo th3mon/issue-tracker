@@ -1,10 +1,12 @@
 "use client";
 
-import { Button, TextField } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import MDEditor from "@uiw/react-md-editor";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 
 interface IssueForm {
   title: string;
@@ -14,18 +16,19 @@ interface IssueForm {
 const NewIssuePage = () => {
   const router = useRouter();
   const { register, control, handleSubmit } = useForm<IssueForm>();
+  const [error, setError] = useState("");
 
   return (
     <form
       className="max-w-xl space-y-3"
       onSubmit={handleSubmit(async (data) => {
-        const result = await axios.post("/api/issues", data);
+        try {
+          await axios.post("/api/issues", data);
 
-        if (result.status === 201) {
           router.push("/issues");
+        } catch (error) {
+          setError("An unexpected error occured.");
         }
-
-        return;
       })}
     >
       <TextField.Root>
@@ -44,6 +47,15 @@ const NewIssuePage = () => {
           />
         )}
       />
+
+      {error && (
+        <Callout.Root color="tomato">
+          <Callout.Icon>
+            <InfoCircledIcon />
+          </Callout.Icon>
+          <Callout.Text>{error}</Callout.Text>
+        </Callout.Root>
+      )}
 
       <Button>Submit New Issue</Button>
     </form>
