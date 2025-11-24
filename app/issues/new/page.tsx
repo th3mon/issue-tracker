@@ -7,15 +7,23 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
-
-interface IssueForm {
-  title: string;
-  description: string;
-}
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  createIssueSchema,
+  CreateIssueSchemaType,
+} from "@/app/validationSchemas";
+import { FormErrorText } from "@/app/components/FormErrorText";
 
 const NewIssuePage = () => {
   const router = useRouter();
-  const { register, control, handleSubmit } = useForm<IssueForm>();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateIssueSchemaType>({
+    resolver: zodResolver(createIssueSchema),
+  });
   const [error, setError] = useState("");
 
   return (
@@ -34,6 +42,7 @@ const NewIssuePage = () => {
       <TextField.Root>
         <TextField.Input placeholder="Title" {...register("title")} />
       </TextField.Root>
+      <FormErrorText message={errors.title?.message} />
 
       <Controller
         name="description"
@@ -47,6 +56,7 @@ const NewIssuePage = () => {
           />
         )}
       />
+      <FormErrorText message={errors.description?.message} />
 
       {error && (
         <Callout.Root color="tomato">
@@ -61,5 +71,4 @@ const NewIssuePage = () => {
     </form>
   );
 };
-
 export default NewIssuePage;
