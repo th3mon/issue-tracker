@@ -1,12 +1,9 @@
 import { Text } from "@radix-ui/themes";
+import { PropsWithChildren } from "react";
 
-type Props = {
-  message: string | undefined;
-};
-
-export const FormErrorText = ({ message }: Props) =>
-  message && (
+export const FormErrorText = ({ children }: PropsWithChildren) =>
+  children && (
     <Text color="red" as="p">
-      {message}
+      {children}
     </Text>
   );

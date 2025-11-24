@@ -42,7 +42,7 @@ const NewIssuePage = () => {
       <TextField.Root>
         <TextField.Input placeholder="Title" {...register("title")} />
       </TextField.Root>
-      <FormErrorText message={errors.title?.message} />
+      <FormErrorText>{errors.title?.message}</FormErrorText>
 
       <Controller
         name="description"
@@ -56,7 +56,7 @@ const NewIssuePage = () => {
           />
         )}
       />
-      <FormErrorText message={errors.description?.message} />
+      <FormErrorText>{errors.description?.message}</FormErrorText>
 
       {error && (
         <Callout.Root color="tomato">
