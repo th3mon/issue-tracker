@@ -1,7 +1,6 @@
 import { Table } from "@radix-ui/themes";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import IssueActions from "./IssueActions";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const issues = [1, 2, 3, 4, 5];
 
