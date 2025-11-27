@@ -8,10 +8,7 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createIssueSchema,
-  CreateIssueSchemaType,
-} from "@/app/validationSchemas";
+import { createIssueSchema, IssueFormData } from "@/app/validationSchemas";
 import { FormErrorText, Spinner } from "@/app/components";
 
 const NewIssuePage = () => {
@@ -21,7 +18,7 @@ const NewIssuePage = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateIssueSchemaType>({
+  } = useForm<IssueFormData>({
     resolver: zodResolver(createIssueSchema),
   });
   const [error, setError] = useState("");
