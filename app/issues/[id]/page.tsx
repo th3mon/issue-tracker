@@ -27,7 +27,7 @@ const IssueDetailPage = async ({ params: { id } }: Props) => {
   }
 
   return (
-    <div>
+    <Box className="max-w-xl">
       <Heading>{issue.title}</Heading>
       <Flex gap="3" my="2">
         <IssueStatusBadge status={issue.status} />
@@ -36,7 +36,7 @@ const IssueDetailPage = async ({ params: { id } }: Props) => {
       <Card className="prose prose-slate prose-headings:text-slate-400 prose-strong:text-slate-500 prose-em:text-slate-400 prose-li:text-slate-400 prose-p:text-slate-300 mt-4">
         <ReactMarkdown>{issue.description}</ReactMarkdown>
       </Card>
-    </div>
+    </Box>
   );
 };
 
