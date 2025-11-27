@@ -1,11 +1,10 @@
 import _ from "lodash";
 import { prisma } from "@/prisma/client";
 import { notFound } from "next/navigation";
-import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
+import { Box, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import { IssueStatusBadge } from "@/app/components";
 import ReactMarkdown from "react-markdown";
-import { Pencil2Icon } from "@radix-ui/react-icons";
-import Link from "next/link";
+import EditIssueButton from "./EditIssueButton";
 
 type Props = {
   params: {
@@ -47,10 +46,7 @@ const IssueDetailPage = async ({ params: { id } }: Props) => {
         </Card>
       </Box>
       <Box>
-        <Button>
-          <Pencil2Icon />
-          <Link href={`/issues/${id}/edit`}> Edit Issue </Link>
-        </Button>
+        <EditIssueButton issueId={id} />
       </Box>
     </Grid>
   );
