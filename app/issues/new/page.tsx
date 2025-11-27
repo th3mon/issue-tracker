@@ -12,8 +12,7 @@ import {
   createIssueSchema,
   CreateIssueSchemaType,
 } from "@/app/validationSchemas";
-import { FormErrorText } from "@/app/components/FormErrorText";
-import Spinner from "@/app/components/Spinner";
+import { FormErrorText, Spinner } from "@/app/components";
 
 const NewIssuePage = () => {
   const router = useRouter();
