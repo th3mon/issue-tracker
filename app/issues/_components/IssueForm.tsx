@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createIssueSchema, IssueFormData } from "@/app/validationSchemas";
+import { issueSchema, IssueFormData } from "@/app/validationSchemas";
 import { FormErrorText, Spinner } from "@/app/components";
 import { Issue } from "@/app/generated/prisma/client";
 
@@ -24,7 +24,7 @@ const IssueForm = ({ issue }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(createIssueSchema),
+    resolver: zodResolver(issueSchema),
   });
   const [error, setError] = useState("");
   const [isSubmitting, setSubmitting] = useState(false);
