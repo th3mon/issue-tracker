@@ -5,6 +5,8 @@ import { Box, Flex, Grid } from "@radix-ui/themes";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
 import DeleteIssueButton from "./DeleteIssueButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/auth/authOptions";
 
 type Props = {
   params: {
@@ -13,6 +15,8 @@ type Props = {
 };
 
 const IssueDetailPage = async ({ params: { id } }: Props) => {
+  const session = await getServerSession(authOptions);
+
   if (_.isNaN(Number(id))) {
     notFound();
   }
@@ -38,10 +42,12 @@ const IssueDetailPage = async ({ params: { id } }: Props) => {
       <Box className="md:col-span-4">
         <IssueDetails issue={issue} />
       </Box>
-      <Flex gap="4" direction="column">
-        <EditIssueButton issueId={id} />
-        <DeleteIssueButton issueId={id} />
-      </Flex>
+      {session && (
+        <Flex gap="4" direction="column">
+          <EditIssueButton issueId={id} />
+          <DeleteIssueButton issueId={id} />
+        </Flex>
+      )}
     </Grid>
   );
 };
