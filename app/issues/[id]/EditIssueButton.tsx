@@ -1,3 +1,4 @@
+import { Endpoints } from "@/app/Endpoints";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
@@ -10,7 +11,9 @@ const EditIssueButton = ({ issueId }: Props) => {
   return (
     <Button>
       <Pencil2Icon />
-      <Link href={`/issues/${issueId}/edit`}> Edit Issue </Link>
+      <Link href={Endpoints.ISSUE_EDIT.replace("${issueId}", issueId)}>
+        Edit Issue
+      </Link>
     </Button>
   );
 };

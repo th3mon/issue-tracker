@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { Spinner } from "@/app/components";
+import { Endpoints } from "@/app/Endpoints";
 
 type Props = {
   issueId: string;
@@ -18,9 +19,9 @@ const DeleteIssueButton = ({ issueId }: Props) => {
     try {
       setDeleting(true);
 
-      await axios.delete("/api/issues/" + issueId);
+      await axios.delete(Endpoints.API_ISSUES + issueId);
 
-      router.push("/issues");
+      router.push(Endpoints.ISSUES);
       router.refresh();
     } catch (error) {
       setDeleting(false);

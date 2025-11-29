@@ -4,11 +4,12 @@ import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { GiBugNet } from "react-icons/gi";
+import { Endpoints } from "./Endpoints";
 
 const NavBar = () => {
   const links = [
     { label: "Dashboard", href: "/" },
-    { label: "Issues", href: "/issues" },
+    { label: "Issues", href: Endpoints.ISSUES },
   ];
 
   const currentPath = usePathname();

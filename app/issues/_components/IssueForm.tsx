@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { issueSchema, IssueFormData } from "@/app/validationSchemas";
 import { FormErrorText, Spinner } from "@/app/components";
 import { Issue } from "@/app/generated/prisma/client";
+import { Endpoints } from "@/app/Endpoints";
 
 type Props = {
   issue?: Issue;
@@ -33,12 +34,12 @@ const IssueForm = ({ issue }: Props) => {
       setSubmitting(true);
 
       if (issue) {
-        await axios.patch("/api/issues/" + issue.id, data);
+        await axios.patch(Endpoints.API_ISSUES + issue.id, data);
       } else {
-        await axios.post("/api/issues", data);
+        await axios.post(Endpoints.API_ISSUES, data);
       }
 
-      router.push("/issues");
+      router.push(Endpoints.ISSUES);
       router.refresh();
     } catch (error) {
       setSubmitting(false);
