@@ -4,7 +4,9 @@ import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { GiBugNet } from "react-icons/gi";
-import { Endpoints } from "./Endpoints";
+import { Endpoints } from "@/app/Endpoints";
+import { useSession } from "next-auth/react";
+import { Box } from "@radix-ui/themes";
 
 const NavBar = () => {
   const links = [
@@ -13,6 +15,9 @@ const NavBar = () => {
   ];
 
   const currentPath = usePathname();
+  const { status, data: session } = useSession();
+  const isAuthenticated = () => status === "authenticated";
+  const isUnauthenticated = () => status === "unauthenticated";
 
   return (
     <nav className="flex gap-5 border-b mb-5 px-5 h-14 items-center">
@@ -35,6 +40,10 @@ const NavBar = () => {
           </li>
         ))}
       </ul>
+      <Box>
+        {isAuthenticated() && <Link href="/api/auth/signout">Log out</Link>}
+        {isUnauthenticated() && <Link href="/api/auth/signin">Login</Link>}
+      </Box>
     </nav>
   );
 };
