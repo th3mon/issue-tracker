@@ -1,15 +1,12 @@
 import { Table } from "@radix-ui/themes";
 import IssueActions from "./IssueActions";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { SkeletonThemeWithSetup, Skeleton } from "@/app/components";
 
 const issues = [1, 2, 3, 4, 5];
 
 const LoadingIssuesPage = () => {
   return (
-    <SkeletonTheme
-      baseColor="hsl(272, 51.0%, 54.0%)"
-      highlightColor="hsl(272, 51.0%, 74.0%)"
-    >
+    <SkeletonThemeWithSetup>
       <IssueActions />
 
       <Table.Root>
@@ -44,7 +41,7 @@ const LoadingIssuesPage = () => {
           ))}
         </Table.Body>
       </Table.Root>
-    </SkeletonTheme>
+    </SkeletonThemeWithSetup>
   );
 };
 
