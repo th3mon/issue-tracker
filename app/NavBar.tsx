@@ -6,7 +6,15 @@ import Link from "next/link";
 import { GiBugNet } from "react-icons/gi";
 import { Endpoints } from "@/app/Endpoints";
 import { useSession } from "next-auth/react";
-import { Box, Container, Flex } from "@radix-ui/themes";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  DropdownMenu,
+  Flex,
+  Text,
+} from "@radix-ui/themes";
 
 const NavBar = () => {
   const links = [
@@ -46,7 +54,26 @@ const NavBar = () => {
           </Flex>
           <Box>
             {isAuthenticated() && (
-              <Link href={Endpoints.API_SIGNOUT}>Log out</Link>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Button radius="full" className="!p-0">
+                    <Avatar
+                      src={session!.user!.image!}
+                      fallback="?"
+                      size="2"
+                      radius="full"
+                    />
+                  </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Label>
+                    <Text size="2">{session!.user!.email!}</Text>
+                  </DropdownMenu.Label>
+                  <DropdownMenu.Item>
+                    <Link href={Endpoints.API_SIGNOUT}>Log out</Link>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             )}
             {isUnauthenticated() && (
               <Link href={Endpoints.API_SIGNIN}>Login</Link>
