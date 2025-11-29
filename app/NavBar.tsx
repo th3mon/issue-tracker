@@ -41,8 +41,8 @@ const NavBar = () => {
         ))}
       </ul>
       <Box>
-        {isAuthenticated() && <Link href="/api/auth/signout">Log out</Link>}
-        {isUnauthenticated() && <Link href="/api/auth/signin">Login</Link>}
+        {isAuthenticated() && <Link href={Endpoints.API_SIGNOUT}>Log out</Link>}
+        {isUnauthenticated() && <Link href={Endpoints.API_SIGNIN}>Login</Link>}
       </Box>
     </nav>
   );
