@@ -6,6 +6,7 @@ import { Issue, User } from "@/app/generated/prisma/client";
 import { Select } from "@radix-ui/themes";
 import { Endpoints } from "@/app/Endpoints";
 import { Skeleton, SkeletonThemeWithSetup } from "@/app/components";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
   issue: Issue;
@@ -37,27 +38,34 @@ const AssigneeSelect = ({ issue }: Props) => {
   }
 
   return (
-    <Select.Root
-      defaultValue={issue.assigned_to_user_id || ""}
-      onValueChange={(userId) => {
-        axios.patch(Endpoints.API_ISSUES + issue.id, {
-          assigned_to_user_id: userId || null,
-        });
-      }}
-    >
-      <Select.Trigger placeholder="Assign..." />
-      <Select.Content>
-        <Select.Group>
-          <Select.Label>Suggestions</Select.Label>
-          <Select.Item value="">Unassigned</Select.Item>
-          {users.map((user) => (
-            <Select.Item key={user.id} value={user.id}>
-              {user.name}
-            </Select.Item>
-          ))}
-        </Select.Group>
-      </Select.Content>
-    </Select.Root>
+    <>
+      <Select.Root
+        defaultValue={issue.assigned_to_user_id || ""}
+        onValueChange={async (userId) => {
+          try {
+            await axios.patch(Endpoints.API_ISSUES + issue.id, {
+              assigned_to_user_id: userId || null,
+            });
+          } catch {
+            toast.error("Cannot use assign user");
+          }
+        }}
+      >
+        <Select.Trigger placeholder="Assign..." />
+        <Select.Content>
+          <Select.Group>
+            <Select.Label>Suggestions</Select.Label>
+            <Select.Item value="">Unassigned</Select.Item>
+            {users.map((user) => (
+              <Select.Item key={user.id} value={user.id}>
+                {user.name}
+              </Select.Item>
+            ))}
+          </Select.Group>
+        </Select.Content>
+      </Select.Root>
+      <Toaster />
+    </>
   );
 };
 
