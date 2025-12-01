@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/auth/authOptions";
 import { Issue } from "@/app/generated/prisma/client";
-import { issueSchema } from "@/app/validationSchemas";
+import { patchIssueSchema } from "@/app/validationSchemas";
 import { prisma } from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -11,6 +11,7 @@ interface Props {
   };
 }
 
+// TODO: Try to refactor validation section
 export async function PATCH(request: NextRequest, { params: { id } }: Props) {
   const session = await getServerSession(authOptions);
 
@@ -19,14 +20,27 @@ export async function PATCH(request: NextRequest, { params: { id } }: Props) {
   }
 
   const body: Issue = await request.json();
-  const result = issueSchema.safeParse(body);
 
+  // INFO: Validate title and description
+  const result = patchIssueSchema.safeParse(body);
   if (!result.success) {
     return NextResponse.json(result.error.format(), { status: 400 });
   }
 
-  const issue = await prisma.issue.findUnique({ where: { id: Number(id) } });
+  // INFO: Validate assigned_to_user_id
+  const { title, description, assigned_to_user_id } = body;
+  if (assigned_to_user_id) {
+    const user = await prisma.user.findUnique({
+      where: { id: assigned_to_user_id },
+    });
 
+    if (!user) {
+      return NextResponse.json({ error: "Invalid user." }, { status: 400 });
+    }
+  }
+
+  // INFO: Validate issue existence
+  const issue = await prisma.issue.findUnique({ where: { id: Number(id) } });
   if (!issue) {
     return NextResponse.json({ error: "Issue not found" }, { status: 404 });
   }
@@ -36,8 +50,9 @@ export async function PATCH(request: NextRequest, { params: { id } }: Props) {
       id: Number(id),
     },
     data: {
-      title: result.data.title,
-      description: result.data.description,
+      title,
+      description,
+      assigned_to_user_id,
     },
   });
 
