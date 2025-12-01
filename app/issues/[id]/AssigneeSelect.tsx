@@ -37,19 +37,21 @@ const AssigneeSelect = ({ issue }: Props) => {
     return null;
   }
 
+  const assignIssue = async (userId: string) => {
+    try {
+      await axios.patch(Endpoints.API_ISSUES + issue.id, {
+        assigned_to_user_id: userId || null,
+      });
+    } catch {
+      toast.error("Cannot use assign user");
+    }
+  };
+
   return (
     <>
       <Select.Root
         defaultValue={issue.assigned_to_user_id || ""}
-        onValueChange={async (userId) => {
-          try {
-            await axios.patch(Endpoints.API_ISSUES + issue.id, {
-              assigned_to_user_id: userId || null,
-            });
-          } catch {
-            toast.error("Cannot use assign user");
-          }
-        }}
+        onValueChange={assignIssue}
       >
         <Select.Trigger placeholder="Assign..." />
         <Select.Content>
