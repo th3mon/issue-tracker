@@ -13,17 +13,7 @@ interface Props {
 }
 
 const AssigneeSelect = ({ issue }: Props) => {
-  const {
-    data: users = [],
-    error,
-    isLoading,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () =>
-      axios.get(Endpoints.API_USERS).then((responce) => responce.data),
-    staleTime: 60000,
-    retry: 3,
-  });
+  const { data: users = [], error, isLoading } = useUsers();
 
   if (isLoading) {
     return (
@@ -70,5 +60,14 @@ const AssigneeSelect = ({ issue }: Props) => {
     </>
   );
 };
+
+const useUsers = () =>
+  useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () =>
+      axios.get(Endpoints.API_USERS).then((responce) => responce.data),
+    staleTime: 60000,
+    retry: 3,
+  });
 
 export default AssigneeSelect;
