@@ -1,23 +1,36 @@
 "use client";
 
-import { Endpoints } from "@/app/Endpoints";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import { User } from "@/app/generated/prisma/client";
 import { Select } from "@radix-ui/themes";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { Endpoints } from "@/app/Endpoints";
+import { Skeleton, SkeletonThemeWithSetup } from "@/app/components";
 
 const AssigneeSelect = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const {
+    data: users = [],
+    error,
+    isLoading,
+  } = useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () =>
+      axios.get(Endpoints.API_USERS).then((responce) => responce.data),
+    staleTime: 60000,
+    retry: 3,
+  });
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const { data } = await axios.get<User[]>(Endpoints.API_USERS);
+  if (isLoading) {
+    return (
+      <SkeletonThemeWithSetup>
+        <Skeleton height={32} />
+      </SkeletonThemeWithSetup>
+    );
+  }
 
-      setUsers(data);
-    };
-
-    fetchUsers();
-  }, []);
+  if (error) {
+    return null;
+  }
 
   return (
     <Select.Root>
