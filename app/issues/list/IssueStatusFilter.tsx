@@ -3,7 +3,7 @@
 import { Endpoints } from "@/app/Endpoints";
 import { Status } from "@/app/generated/prisma/enums";
 import { Select } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {};
 
@@ -27,11 +27,24 @@ const statues: { label: string; value?: Status }[] = [
 
 const IssueStatusFilter = (props: Props) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   return (
     <Select.Root
+      defaultValue={searchParams.get("status") || ""}
       onValueChange={(status) => {
-        const query = status ? `?status=${status}` : "";
+        const params = new URLSearchParams();
+        const orderBy = searchParams.get("orderBy");
+
+        if (status) {
+          params.append("status", status);
+        }
+
+        if (orderBy) {
+          params.append("orderBy", orderBy);
+        }
+
+        const query = params.size ? "?" + params.toString() : "";
 
         router.push(`${Endpoints.ISSUES}/${query}`);
       }}
