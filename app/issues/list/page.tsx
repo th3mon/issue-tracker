@@ -24,6 +24,7 @@ type Column = {
 const getStatus = (status: Status): Status | undefined =>
   Object.values(Status).includes(status) ? status : undefined;
 
+// TODO: Implement ASC and DESC sorting
 const IssuesPage = async ({ searchParams }: Props) => {
   const columns: Column[] = [
     { label: "Issue", value: "title" },
