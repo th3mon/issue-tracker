@@ -1,17 +1,19 @@
 import { prisma } from "@/prisma/client";
 import { Issue } from "@/app/generated/prisma/client";
 import { Status } from "@/app/generated/prisma/enums";
-import { Table } from "@radix-ui/themes";
+import { Box, Table } from "@radix-ui/themes";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 import NextLink from "next/link";
 import { IssueStatusBadge, Link } from "@/app/components";
 import { Endpoints } from "@/app/Endpoints";
 import IssueActions from "./IssueActions";
+import Pagination from "@/app/components/Pagination";
 
 type Props = {
   searchParams: {
     status: Status;
     orderBy: keyof Issue;
+    page: string;
   };
 };
 
@@ -46,17 +48,25 @@ const IssuesPage = async ({ searchParams }: Props) => {
     },
   ];
   const status = getStatus(searchParams.status);
+  const where = { status };
   const orderBy = getOrderBy(columns, searchParams.orderBy);
+  const page = Number(searchParams.page) || 1;
+  // TODO: Add dropdown to select pageSize
+  const pageSize = 10;
   const issues = await prisma.issue.findMany({
-    where: { status },
+    where,
     orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
   });
 
+  const itemCount = await prisma.issue.count({ where });
+
   return (
-    <div>
+    <Box>
       <IssueActions />
 
-      <Table.Root>
+      <Table.Root mb="5">
         <Table.Header>
           <Table.Row>
             {columns.map((column) => (
@@ -105,7 +115,13 @@ const IssuesPage = async ({ searchParams }: Props) => {
           ))}
         </Table.Body>
       </Table.Root>
-    </div>
+
+      <Pagination
+        itemCount={itemCount}
+        pageSize={pageSize}
+        currentPage={page}
+      />
+    </Box>
   );
 };
 
