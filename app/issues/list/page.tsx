@@ -11,13 +11,11 @@ type Props = {
   };
 };
 
-const IssuesPage = async ({ searchParams }: Props) => {
-  // TODO: Move setting and validating status to function -> getStatus()
-  const statuses = Object.values(Status);
-  const status = statuses.includes(searchParams.status)
-    ? searchParams.status
-    : undefined;
+const getStatus = (status: Status): Status | undefined =>
+  Object.values(Status).includes(status) ? status : undefined;
 
+const IssuesPage = async ({ searchParams }: Props) => {
+  const status = getStatus(searchParams.status);
   const issues = await prisma.issue.findMany({
     where: { status },
   });
