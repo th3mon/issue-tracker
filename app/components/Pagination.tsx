@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -5,6 +7,7 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { Button, Flex, Text } from "@radix-ui/themes";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   itemCount: number;
@@ -13,11 +16,21 @@ type Props = {
 };
 
 const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const pageCout = Math.ceil(itemCount / pageSize);
 
   if (pageCout <= 1) {
     return null;
   }
+
+  const changePage = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("page", String(page));
+
+    router.push("?" + params.toString());
+  };
 
   return (
     <Flex align="center" gap="2">
@@ -25,19 +38,39 @@ const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
         Page {currentPage} of {pageCout}
       </Text>
 
-      <Button color="gray" variant="soft" disabled={currentPage === 1}>
+      <Button
+        color="gray"
+        variant="soft"
+        disabled={currentPage === 1}
+        onClick={() => changePage(1)}
+      >
         <DoubleArrowLeftIcon />
       </Button>
 
-      <Button color="gray" variant="soft" disabled={currentPage === 1}>
+      <Button
+        color="gray"
+        variant="soft"
+        disabled={currentPage === 1}
+        onClick={() => changePage(currentPage - 1)}
+      >
         <ChevronLeftIcon />
       </Button>
 
-      <Button color="gray" variant="soft" disabled={currentPage === pageCout}>
+      <Button
+        color="gray"
+        variant="soft"
+        disabled={currentPage === pageCout}
+        onClick={() => changePage(currentPage + 1)}
+      >
         <ChevronRightIcon />
       </Button>
 
-      <Button color="gray" variant="soft" disabled={currentPage === pageCout}>
+      <Button
+        color="gray"
+        variant="soft"
+        disabled={currentPage === pageCout}
+        onClick={() => changePage(pageCout)}
+      >
         <DoubleArrowRightIcon />
       </Button>
     </Flex>
