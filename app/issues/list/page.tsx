@@ -24,6 +24,16 @@ type Column = {
 const getStatus = (status: Status): Status | undefined =>
   Object.values(Status).includes(status) ? status : undefined;
 
+type OrderBy = Partial<Record<keyof Issue, "asc" | "desc">>;
+
+const getOrderBy = (
+  columns: Column[],
+  orderBy: keyof Issue,
+): OrderBy | undefined =>
+  columns.some((column) => column.value === orderBy)
+    ? { [orderBy]: "asc" }
+    : undefined;
+
 // TODO: Implement ASC and DESC sorting
 const IssuesPage = async ({ searchParams }: Props) => {
   const columns: Column[] = [
@@ -36,8 +46,10 @@ const IssuesPage = async ({ searchParams }: Props) => {
     },
   ];
   const status = getStatus(searchParams.status);
+  const orderBy = getOrderBy(columns, searchParams.orderBy);
   const issues = await prisma.issue.findMany({
     where: { status },
+    orderBy,
   });
 
   return (
