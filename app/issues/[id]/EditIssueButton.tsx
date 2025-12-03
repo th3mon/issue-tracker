@@ -11,9 +11,7 @@ const EditIssueButton = ({ issueId }: Props) => {
   return (
     <Button>
       <Pencil2Icon />
-      <Link href={Endpoints.ISSUE_EDIT.replace("${issueId}", issueId)}>
-        Edit Issue
-      </Link>
+      <Link href={`${Endpoints.ISSUE_EDIT}${issueId}`}>Edit Issue</Link>
     </Button>
   );
 };

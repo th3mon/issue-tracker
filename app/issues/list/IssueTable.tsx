@@ -48,11 +48,7 @@ const IssueTable = async ({ searchParams, issues }: Props) => {
         {issues.map((issue) => (
           <Table.Row key={issue.id}>
             <Table.Cell>
-              <Link
-                href={Endpoints.ISSUE.replace("${issueId}", String(issue.id))}
-              >
-                {issue.title}
-              </Link>
+              <Link href={`${Endpoints.ISSUE}${issue.id}`}>{issue.title}</Link>
               <div className="md:hidden">
                 <IssueStatusBadge status={issue.status} />
               </div>
