@@ -1,13 +1,18 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-module.exports = nextConfig;
-
-// Injected content via Sentry wizard below
-
+const {
+  PrismaPlugin: withPrismaPlugin,
+} = require("@prisma/nextjs-monorepo-workaround-plugin");
 const { withSentryConfig } = require("@sentry/nextjs");
 
-module.exports = withSentryConfig(module.exports, {
+/** @type {import('next').NextConfig} */
+const baseConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ["@prisma/client"],
+  },
+};
+
+const prismaConfig = new withPrismaPlugin(baseConfig);
+
+const sentryOptions = {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
@@ -37,4 +42,8 @@ module.exports = withSentryConfig(module.exports, {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
-});
+};
+
+const finalConfig = withSentryConfig(prismaConfig, sentryOptions);
+
+module.exports = finalConfig;
