@@ -1,5 +1,5 @@
 import { Card, Flex, Text } from "@radix-ui/themes";
-import { Status } from "./generated/prisma/enums";
+import { Status } from "./generated/prisma";
 import Link from "next/link";
 import { Endpoints } from "./Endpoints";
 

@@ -1,5 +1,5 @@
 import { Badge } from "@radix-ui/themes";
-import { Status } from "../generated/prisma/enums";
+import { Status } from "../generated/prisma";
 
 type Color = "red" | "violet" | "green";
 type Props = {
