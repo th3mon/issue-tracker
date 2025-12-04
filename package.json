@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate && npm run copy:prisma-engine && prisma migrate deploy",
-    "copy:prisma-engine": "node scripts/copy-prisma-engine.js"
+    "postinstall": "prisma generate && npm run check:prisma-engine && prisma migrate deploy",
+    "check:prisma-engine": "node scripts/check-prisma-engine.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
