@@ -31,8 +31,6 @@ if (fs.existsSync(SOURCE_ENGINE)) {
   console.warn("⚠️ Prisma query engine not found:", SOURCE_ENGINE);
 }
 
-const COPIED_ENGINE = path.join(TARGET_DIR, TARGET_ENGINE);
-
-if (!fs.existsSync(COPIED_ENGINE)) {
-  console.log(`Engine doesn't exists at ${COPIED_ENGINE}`);
+if (!fs.existsSync(TARGET_ENGINE)) {
+  console.warn(`⚠️ Engine doesn't exists at ${TARGET_ENGINE}`);
 }
